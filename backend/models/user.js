@@ -30,7 +30,9 @@ const userSchema = new mongoose.Schema({
     isMailConfirm: Boolean,
     createdDate: Date,
     updatedDate: Date,
-    isAdmin: Boolean
+    isAdmin: Boolean,
+    forgotPasswordCode: String,
+    isForgotPasswordCodeActive: Boolean
 })
 
 const User = mongoose.model("User", userSchema)

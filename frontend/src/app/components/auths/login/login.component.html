@@ -1,0 +1,102 @@
+<div class="specialHeight container d-flex justify-content-center">
+    <div class="col-md-3">
+        <main class="form-signin w-100 m-auto">
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+                <div class="border border-secondary px-5 py-3">
+                    <h1 class="h3 m-5 pb-3 border-dark border-bottom"
+                        style="font-family:cursive;">OVK COMMERCE</h1>
+                    <div class="form-group">
+                        <input
+                          type="text"
+                          #emailOrUserName
+                          [appValid]="emailOrUserName.validity.valid"
+                          required
+                          minlength="3"
+                          ngModel
+                          name="emailOrUserName"
+                          id="emailOrUserName"
+                          placeholder="Email or username"
+                          class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mt-3">
+                            <input
+                            type="password"
+                            [appValid]="password.validity.valid"
+                            #password
+                            required
+                            ngModel
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                            class="form-control">
+                            <button class="btn btn-outline-info bg-info-subtle" type="button" id="button-addon2">
+                                <i (click)="showOrHidePassword(password)" [class]="password.type == 'password' ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                            </button>
+                        </div>
+                        <app-loading-button
+                          [form]="loginForm"
+                          iconClassName="fa fa-unlock"
+                          btnName="Sign In"
+                          btnLoadingName="Signing In...">
+                          </app-loading-button> 
+                    </div> 
+                    <hr>
+                    <a
+                      data-bs-toggle="modal"
+                      data-bs-target="#confirmEmailModal"
+                      class="h6 text-info">
+                      Send to Confirm Email
+                    </a>
+                    <div class="box text-muted"> 
+                    <p> or </p>
+                    </div>
+                    <a routerLink="" class="h6 text-info">Forgot Password</a>
+                </div>
+                <div class="border border-secondary px-5 pt-4 mt-3">
+                    <p>Don't have an account? <a routerLink="/register" class="h6 text-info">Register</a></p>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmEmailModal" tabindex="-1" aria-labelledby="confirmEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="confirmEmailModalLabel">Send to Confirm Email</h1>
+        <button type="button" class="btn-close" id="confirmEmailModalCloseBtn" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form #confirmEmailForm="ngForm" (ngSubmit)="sendConfirmMail(confirmEmailForm)" style="height: 100%;">
+        <div class="modal-body">
+            <div class="form-floating">
+                <input
+                    type="text"
+                    #emailOrUserNameForConfirmEmail
+                    [appValid]="emailOrUserNameForConfirmEmail.validity.valid"
+                    required
+                    minlength="3"
+                    ngModel
+                    name="emailOrUserNameForConfirmEmail"
+                    id="emailOrUserNameForConfirmEmail"
+                    placeholder="email or username"
+                    class="form-control">
+                <label for="emailOrUserNameForConfirmEmail">Email or username</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button type="button" class="btn btn-success" [disabled]="!confirmEmailForm.valid">
+                Send Email
+            </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

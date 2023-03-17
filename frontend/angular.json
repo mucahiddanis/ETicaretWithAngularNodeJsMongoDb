@@ -50,9 +50,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/bootstrap.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/bootstrap.bundle.js"
+            ]
           },
           "configurations": {
             "production": {
