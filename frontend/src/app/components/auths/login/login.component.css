@@ -1,13 +1,9 @@
-.specialHeight {
-    height: 100vh;
-}
 
-form {
+.loginform {
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
-    height: 100vh;
     text-align: center;
 }
 

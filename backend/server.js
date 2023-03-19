@@ -22,7 +22,7 @@ connection()
 createAdminUser()
 
 // Auth Router
-app.use("/auth/", authRouter)
+app.use("/api/auth/", authRouter)
 
 // Listen Port
 const port = process.env.PORT || 3000;

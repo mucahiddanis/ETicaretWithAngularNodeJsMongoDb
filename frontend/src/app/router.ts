@@ -7,6 +7,10 @@ export const routes: Routes = [
         loadComponent: () => import("./components/auths/login/login.component").then(c => c.LoginComponent),
     },
     {
+        path: "confirmMail/:value",
+        loadComponent: () => import("./components/auths/confirm-mail/confirm-mail.component").then(c => c.ConfirmMailComponent),
+    },
+    {
         path: "register",
         loadComponent: () => import("./components/auths/register/register.component").then(c => c.RegisterComponent),
     },

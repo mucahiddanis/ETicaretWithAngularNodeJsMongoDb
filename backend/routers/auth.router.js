@@ -9,11 +9,11 @@ const sendMail = require("../services/mail.service")
 const MailOptions = require("../dtos/mail")
 
 // Register
-router.post("/register", upload.single("image"), async (req, res) => {
+router.post("/register", async (req, res) => {
     const newUser = new User(req.body)
+    
     newUser.createdDate = Date.now()
     newUser._id = uuidv4()
-    newUser.imageUrl = req.file.path
     newUser.isMailConfirm = false
     try {
         let mailConfirmCode = Math.floor(Math.random() * 1000000)
@@ -40,13 +40,19 @@ sendConfirmMail = (user) => {
     let mailOptions = new MailOptions(
         user.email,
         "Mail Onayı",
-        `<h1 style="text-align: center; color: #ec3d08;">-ÖVK COMMERCE-</h1>
-            <div style="border: 1px solid #5e5b5b88; padding: 30px;">
-            <h3>Congrulations!</h3>
-            <h3>Welcome the ÖVK Commerce</h3>
-            <p style="font-size: 20px;">To complete your sign up, you are simply click on the link provided in this email. Our application is completely free of charge and we hope you enjoy using it. </p>
-            <a href="http://localhost:4200/auth/confirmMail/${user.mailConfirmCode}" style="border-style: none; background: #ec3d08; color: #fff; padding: 10px; border-radius: 5px; box-shadow: 1px 1px 3px #a19999c0;">Mail Adresimi Onayla</a>
-            </div>`
+        `<div style="border: 1px solid #5e5b5b88; padding: 30px;">
+            <h1 style="text-align: center; border-bottom: 1px solid #0dcaf0; padding-bottom: 20px; font-family: cursive; font-weight: 400;">OVK COMMERCE</h1>
+            <h2>Congrulations!</h2>
+            <h3>Welcome to OVK COMMERCE</h3>
+            <p style="font-size: 20px; margin-bottom: 40px;">To complete your sign up, you are simply click on the button provided in this
+                email. Our application is completely free of charge and we hope you enjoy using it. </p>
+            <a
+            href="http://localhost:4200/confirmMail/${user.mailConfirmCode}"
+            style="border-style: none; background: #0dcaf0; color: #fff; padding: 10px; border-radius: 5px; box-shadow: 1px 1px 5px #a19999c0; text-decoration: none; font-size: 20px; text-align: center;">
+                Mail Adresimi Onayla
+            </a>
+            <h4 style="text-align: center;"><i>Enjoy your shopping </i>😊</h4>
+        </div>`
     )
     sendMail(mailOptions)
 }
@@ -54,17 +60,18 @@ sendConfirmMail = (user) => {
 // Email Confirm
 router.post("/confirm-mail", async (req, res) => {
     const { code } = req.body
+
     try {
         const user = await User.findOne({ mailConfirmCode: code })
         if (user == null) {
             res.status(400).json({ "message": "User is not defined!" })
         } else {
             if (user.isMailConfirm) {
-                res.status(400).json({ "message": "User is valid!" })
+                res.status(400).json({ "message": "User is already valid!" })
             } else {
                 user.isMailConfirm = true;
                 const result = await User.findOneAndUpdate(user)
-                res.json({ result: result })
+                res.json({ message: "Email address has been successfully confirmed" })
             }
         }
     } catch (error) {
@@ -111,17 +118,28 @@ router.post("/login", async (req, res) => {
 })
 
 // Send Confirm Email
-router.post("/send-confirm-mail", async (req, res) => {
+router.post("/sendConfirmMail", async (req, res) => {
     try {
-        const { email } = req.body
-        let user = await User.find({ email: email })
-        if (user[0].length == 0) {
-            res.status(400).json({ "message": "User is not defined!" })
+        const { emailOrUserName } = req.body
+
+        let users = await User.find({ email: emailOrUserName })
+        if (users.length == 0) {
+            users = await User.find({ userName: emailOrUserName })
+            if (users.length == 0) {
+                res.status(400).json({ "message": "User is not defined!" })
+            } else {
+                if (users[0].isMailConfirm) {
+                    res.status(400).json({ "message": "Email is already confirm!" })
+                } else {
+                    sendConfirmMail(users[0])
+                    res.json({ message: "Your confirmation email has been successfully sent!" })
+                }
+            }
         } else {
-            if (user[0].isMailConfirm) {
+            if (users[0].isMailConfirm) {
                 res.status(400).json({ "message": "Email is already confirm!" })
             } else {
-                sendConfirmMail(user[0])
+                sendConfirmMail(users[0])
                 res.json({ message: "Your confirmation email has been successfully sent!" })
             }
         }

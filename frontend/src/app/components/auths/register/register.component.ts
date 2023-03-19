@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { SharedModule } from 'src/app/components/commons/modules/shared.module';
 
 @Component({
@@ -10,4 +11,16 @@ import { SharedModule } from 'src/app/components/commons/modules/shared.module';
 })
 export class RegisterComponent {
 
+  constructor(){ }
+  
+  register(form: NgForm) {
+
+  }
+
+  showOrHidePassword(password: HTMLInputElement) {
+    if(password.type == "password")
+      password.type = "text"
+    else
+      password.type = "password"
+  }
 }
