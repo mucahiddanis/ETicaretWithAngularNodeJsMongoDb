@@ -14,22 +14,27 @@ export class LoginComponent {
 
   constructor(
     private _auth: AuthService
-  ){ }
+  ) { }
 
-  login(form: NgForm){
-    if(form.valid)
+  login(form: NgForm) {
+    if (form.valid)
       this._auth.login(form.value)
   }
 
   showOrHidePassword(password: HTMLInputElement) {
-    if(password.type == "password")
+    if (password.type == "password")
       password.type = "text"
     else
       password.type = "password"
   }
 
-  sendConfirmMail(form: NgForm){
-    if(form.valid)
+  sendConfirmMail(form: NgForm) {
+    if (form.valid)
       this._auth.sendConfirmMail(form.controls["emailOrUserNameForConfirmEmail"].value)
+  }
+
+  forgotPasswordMail(form: NgForm) {
+    if (form.valid)
+      this._auth.forgotPasswordMail(form.controls["emailOrUserNameForForgotPasswordEmail"].value)
   }
 }

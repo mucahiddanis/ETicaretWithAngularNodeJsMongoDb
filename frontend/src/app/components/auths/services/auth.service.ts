@@ -33,6 +33,13 @@ export class AuthService {
     })
   }
 
+  register(model: any){
+    this._http.post<MessageResultModel>("auth/register", model, res => {
+      this._toastr.success(res.message)
+      this._router.navigateByUrl("/login")
+    })
+  }
+
   logout(){
     localStorage.clear()
     this._router.navigateByUrl("/login")
@@ -53,6 +60,34 @@ export class AuthService {
     this._http.post<MessageResultModel>("auth/confirm-mail", model, res => {
       callBack(res)
     })
+  }
+
+  forgotPasswordMail (value: string) {
+    let model = {emailOrUserName: value}
+    this._http.post<any>("auth/forgotPassword", model, res => {
+      this._toastr.info("Your password reset email has been sent successfully.")
+      this._router.navigateByUrl(`/forgot-password/${res._id}`)
+      let element = document.getElementById("forgotPasswordModalCloseBtn")
+      element.click()
+    })
+  }
+
+  refreshPassword(model: any){
+    this._http.post<MessageResultModel>("auth/refreshPassword", model, res => {
+      this._toastr.info(res.message)
+      this._router.navigateByUrl("/login")
+    })
+  }
+
+  // used new guard
+  isLogged() {
+    let token = localStorage.getItem("accessToken")
+
+    if (token != null && token != undefined) {
+      return true
+    }
+    this._router.navigateByUrl("/login")
+    return false
   }
 }
 

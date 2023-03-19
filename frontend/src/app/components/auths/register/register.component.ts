@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SharedModule } from 'src/app/components/commons/modules/shared.module';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -11,10 +12,12 @@ import { SharedModule } from 'src/app/components/commons/modules/shared.module';
 })
 export class RegisterComponent {
 
-  constructor(){ }
+  constructor(
+    private _auth: AuthService
+  ){ }
   
   register(form: NgForm) {
-
+    this._auth.register(form.value)
   }
 
   showOrHidePassword(password: HTMLInputElement) {

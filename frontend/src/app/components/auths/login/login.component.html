@@ -1,4 +1,4 @@
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center mt-3">
     <div class="col-md-4">
         <main class="form-signin w-100 m-auto">
             <form class="loginform" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
@@ -32,7 +32,7 @@
                     <div class="box text-muted">
                         <p> or </p>
                     </div>
-                    <a routerLink="" class="h6 text-info">Forgot Password</a>
+                    <a data-bs-toggle="modal" data-bs-target="#forgotPasswordModal" class="h6 text-info">Forgot Password</a>
                     </div>
                 </div>
                 <div class="border border-secondary px-5 pt-4 mt-3">
@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Send Confirm Mail Modal -->
 <div class="modal fade" id="confirmEmailModal" tabindex="-1" aria-labelledby="confirmEmailModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
@@ -69,6 +69,48 @@
                         Close
                     </button>
                     <button type="submit" class="btn btn-success" [disabled]="!confirmEmailForm.valid">
+                        Send Email
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="forgotPasswordModalLabel">Forgot Password!</h1>
+                <button type="button" class="btn-close" id="forgotPasswordModalCloseBtn" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+             <form #forgotPasswordMailForm="ngForm" (ngSubmit)="forgotPasswordMail(forgotPasswordMailForm)">
+                <div class="modal-body">
+                    <div class="form-floating">
+                        <input
+                          type="text"
+                          #emailOrUserNameForForgotPasswordEmail
+                          [appValid]="emailOrUserNameForForgotPasswordEmail.validity.valid"
+                          required
+                          minlength="3"
+                          ngModel
+                          name="emailOrUserNameForForgotPasswordEmail"
+                          id="emailOrUserNameForForgotPasswordEmail"
+                          placeholder="email or username"
+                          class="form-control">
+                        <label for="emailOrUserNameForForgotPasswordEmail">Email or username</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-success" [disabled]="!forgotPasswordMailForm.valid">
                         Send Email
                     </button>
                 </div>
