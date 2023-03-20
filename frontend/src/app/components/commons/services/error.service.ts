@@ -12,9 +12,9 @@ export class ErrorService {
   ) { }
 
   errorHandler(err: HttpErrorResponse){
-    if(err.status == 0 || err.status == 404)
+    if(err.status == 0)
       this._toastr.error("Api adresine ulaşılamıyor!")
-    else if (err.status == 401 || err.status == 400)
+    else if (err.status == 401 || err.status == 400 || err.status == 500)
       this._toastr.error(err.error.message)
     console.log
   }

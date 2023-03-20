@@ -22,17 +22,17 @@ export class GenericHttpService {
     })
   }
 
-  setApiUrl(api: string, isDiffrentApi: boolean){
-    if(isDiffrentApi)
+  setApiUrl(api: string, isDifferentApi: boolean){
+    if(isDifferentApi)
       return api;
     
     return this.api + api;
   }
   //this._http.get<AuthModel>("http://localhost:2000",res=>{},true)
 
-  get<T>(api:string, callBack:(res:T)=> void, isDiffrentApi: boolean = false,options = {}){
+  get<T>(api:string, callBack:(res:T)=> void, isDifferentApi: boolean = false,options = {}){
     this.store.dispatch(changeLoading()); //true
-    this._http.get<T>(this.setApiUrl(api,isDiffrentApi), {}).subscribe({
+    this._http.get<T>(this.setApiUrl(api, isDifferentApi), {}).subscribe({
       next: (res)=>{
         callBack(res);
         if(this.isLoading)
@@ -46,9 +46,9 @@ export class GenericHttpService {
     })
   }
 
-  post<T>(api: string, model:any, callBack: (res:T)=>void,isDiffrentApi: boolean = false,options = {}){
+  post<T>(api: string, model:any, callBack: (res:T)=>void,isDifferentApi: boolean = false,options = {}){
     this.store.dispatch(changeLoading()); //true
-    this._http.post<T>(this.setApiUrl(api,isDiffrentApi),model, {}).subscribe({
+    this._http.post<T>(this.setApiUrl(api,isDifferentApi),model, {}).subscribe({
       next: (res)=>{
         callBack(res);
         if(this.isLoading)

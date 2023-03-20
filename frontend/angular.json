@@ -54,7 +54,8 @@
               "src/assets/bootstrap.css"
             ],
             "scripts": [
-              "src/assets/bootstrap.bundle.js"
+              "src/assets/bootstrap.bundle.js",
+              "src/assets/jquery.js"
             ]
           },
           "configurations": {

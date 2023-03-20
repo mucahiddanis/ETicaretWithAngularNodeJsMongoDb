@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { v4: uuidv4 } = require("uuid")
 const User = require("../models/user")
+const errorHandler = require("../services/error.service")
 
 const upload = require("../services/file.service")
 const token = require("../services/token.service")
@@ -28,9 +29,9 @@ router.post("/register", async (req, res) => {
         res.json({ message: "User registration created successfully. Your confirmation email has been sent." })
     } catch (error) {
         if (error.code == "11000") {
-            res.status(400).json({ message: "email or username is invalid!" })
+            errorHandler(res, { message: "email or username is invalid!" })
         } else {
-            res.status(400).json({ message: error.message })
+           errorHandler(res, error)
         }
     }
 })
@@ -89,10 +90,10 @@ router.post("/confirm-mail", async (req, res) => {
     try {
         const user = await User.findOne({ mailConfirmCode: code })
         if (user == null) {
-            res.status(400).json({ "message": "User is not defined!" })
+            errorHandler(res, { "message": "User is not defined!" })
         } else {
             if (user.isMailConfirm) {
-                res.status(400).json({ "message": "User is already valid!" })
+                errorHandler(res, { "message": "User is already valid!" })
             } else {
                 user.isMailConfirm = true;
                 const result = await User.findByIdAndUpdate(user._id, user)
@@ -100,7 +101,7 @@ router.post("/confirm-mail", async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        errorHandler(res, error)
     }
 })
 
@@ -112,7 +113,7 @@ router.post("/login", async (req, res) => {
         if (user.length == 0) {
             var user = await User.find({ userName: emailOrUserName })
             if (user.length == 0) {
-                res.status(401).json({ message: "User is not found." })
+                errorHandler(res, { message: "User is not found." })
             } else {
                 if (user[0].password == password) {
                     if (user[0].isMailConfirm) {
@@ -138,7 +139,7 @@ router.post("/login", async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        errorHandler(res, error)
     }
 })
 
@@ -151,10 +152,10 @@ router.post("/sendConfirmMail", async (req, res) => {
         if (users.length == 0) {
             users = await User.find({ userName: emailOrUserName })
             if (users.length == 0) {
-                res.status(400).json({ "message": "User is not defined!" })
+                res.status(401).json({ "message": "User is not defined!" })
             } else {
                 if (users[0].isMailConfirm) {
-                    res.status(400).json({ "message": "Email is already confirm!" })
+                    res.status(401).json({ "message": "Email is already confirm!" })
                 } else {
                     sendConfirmMail(users[0])
                     res.json({ message: "Your confirmation email has been successfully sent!" })
@@ -162,14 +163,14 @@ router.post("/sendConfirmMail", async (req, res) => {
             }
         } else {
             if (users[0].isMailConfirm) {
-                res.status(400).json({ "message": "Email is already confirm!" })
+                res.status(401).json({ "message": "Email is already confirm!" })
             } else {
                 sendConfirmMail(users[0])
                 res.json({ message: "Your confirmation email has been successfully sent!" })
             }
         }
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        errorHandler(res, error)
     }
 })
 
@@ -181,7 +182,7 @@ router.post("/forgotPassword", async (req, res) => {
         if (users.length == 0) {
             users = await User.find({ userName: emailOrUserName })
             if (users.length == 0) {
-                res.status(400).json({ "message": "User is not defined!" })
+                res.status(401).json({ "message": "User is not defined!" })
             } else {
                 users[0].forgotPasswordCode = createSixDigitCode()
                 users[0].isForgotPasswordCodeActive = true
@@ -197,7 +198,7 @@ router.post("/forgotPassword", async (req, res) => {
             res.json({ _id: users[0]._id })
         }
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        errorHandler(res, error)
     }
 })
 
@@ -207,10 +208,10 @@ router.post("/refreshPassword", async (req, res) => {
         const { _id, code, newPassword } = req.body
         let users = await User.find({ _id: _id, forgotPasswordCode: code })
         if (users.length == 0) {
-            res.status(400).json({ "message": "User is not defined!" })
+            res.status(401).json({ "message": "User is not defined!" })
         } else {
             if (!users[0].isForgotPasswordCodeActive) {
-                res.status(400).json({ "message": "Invalid code!" })
+                res.status(401).json({ "message": "Invalid code!" })
             } else {
                 users[0].password = newPassword
                 users[0].isForgotPasswordCodeActive = false
@@ -219,7 +220,7 @@ router.post("/refreshPassword", async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        errorHandler(res, error)
     }
 })
 
