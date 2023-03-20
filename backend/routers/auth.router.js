@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
         if (error.code == "11000") {
             errorHandler(res, { message: "email or username is invalid!" })
         } else {
-           errorHandler(res, error)
+            errorHandler(res, error)
         }
     }
 })
@@ -68,7 +68,7 @@ sendForgotPasswordMail = (user) => {
     let mailOptions = new MailOptions(
         user.email,
         "Forgot Password Code",
-            `<div style="border: 1px solid #5e5b5b88; padding: 30px;">
+        `<div style="border: 1px solid #5e5b5b88; padding: 30px;">
             <h1 style="text-align: center; border-bottom: 1px solid #0dcaf0; padding-bottom: 20px; font-family: cursive; font-weight: 400;">OVK COMMERCE</h1>
             <h2>To Reset Your Password:</h2>
             <h3>Welcome to OVK COMMERCE</h3>
@@ -137,6 +137,44 @@ router.post("/login", async (req, res) => {
             } else {
                 res.status(401).json({ message: "Password is wrong!" })
             }
+        }
+    } catch (error) {
+        errorHandler(res, error)
+    }
+})
+
+// Login with Google
+router.post("/googleLogin", async (req, res) => {
+    try {
+        const { email, id, name, photoUrl } = req.body
+        let users = await User.find({ email: email })
+        let mailConfirmCode = createSixDigitCode()
+        let checkMailConfirmCode = await User.find({ mailConfirmCode: mailConfirmCode })
+        while (checkMailConfirmCode.length > 0) {
+            mailConfirmCode = createSixDigitCode()
+            checkMailConfirmCode = await User.find({ mailConfirmCode: mailConfirmCode })
+        }
+        if (users.length == 0) {
+            let user = new User({
+                _id: uuidv4(),
+                email: email,
+                name: name,
+                password: id,
+                userName: email,
+                createdDate: new Date(),
+                imageUrl: photoUrl,
+                isAdmin: false,
+                isMailConfirm: true,
+                mailConfirmCode: mailConfirmCode
+            })
+
+            await user.save()
+            const payload = { user: user }
+            res.json({ token: token(payload), user: user })
+
+        } else {
+            const payload = { user: users[0] }
+            res.json({ token: token(payload), user: users[0] })
         }
     } catch (error) {
         errorHandler(res, error)
@@ -216,7 +254,7 @@ router.post("/refreshPassword", async (req, res) => {
                 users[0].password = newPassword
                 users[0].isForgotPasswordCodeActive = false
                 await User.findByIdAndUpdate(_id, users[0])
-                res.json ({message: "Your password has been successfully changed."})
+                res.json({ message: "Your password has been successfully changed." })
             }
         }
     } catch (error) {

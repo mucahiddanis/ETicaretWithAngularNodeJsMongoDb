@@ -6,6 +6,7 @@ const createAdminUser = require("./options/configurations")
 // Routers
 const authRouter = require("./routers/auth.router")
 const categoryRouter = require("./routers/category.router")
+const productRouter = require("./routers/product.router")
 
 // For API requests
 const app = express()
@@ -27,6 +28,9 @@ app.use("/api/auth/", authRouter)
 
 // Category Router
 app.use("/api/categories/", categoryRouter)
+
+// Product Router
+app.use("/api/products/", productRouter)
 
 // Listen Port
 const port = process.env.PORT || 3000;
