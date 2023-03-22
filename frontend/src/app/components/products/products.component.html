@@ -1,0 +1,112 @@
+<div class="container mt-4">
+    <div class="row bg-info-subtle mb-4 pt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Products</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="form-group">
+        <button routerLink="/admin/products/add" class="btn btn-outline-info btn-sm">
+            <i class="fa fa-plus"></i>
+        </button>
+        <div class="col-md-3" style="float: right;">
+            <div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-white border-info" style="border-right: none;" id="basic-addon1"><i
+                            class="fa fa-search"></i></span>
+                    <input [(ngModel)]="search" type="search" class="form-control border-info"
+                        style="border-left: none;" placeholder="Search" aria-label="search"
+                        aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover table-striped" style="overflow: auto">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Images</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Categories</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Price</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">is Active?</th>
+                <th scope="col">Processes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of products | productPipe: search let index = index">
+                <td>{{index +1}}</td>
+                <td class="text-center" style="cursor:pointer;" (click)="setImageForModal(product)"
+                    data-bs-toggle="modal" data-bs-target="#imageModal">
+                    <img [src]="'http://localhost:3000/' + product.imageUrls[0].path" width="50px">
+                </td>
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>
+                    <ul>
+                        <li *ngFor="let category of product.categories">
+                            {{category.name}}
+                        </li>
+                    </ul>
+                </td>
+                <td>{{product.stock}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.createdDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+                <td class="text-center mx-auto">
+                    <div class="form-check form-switch">
+                        <input
+                          class="form-check-input bg-danger"
+                          type="checkbox"
+                          role="switch"
+                          id="flexSwitchCheckChecked"
+                          checked>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn text-warning me-1">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button (click)="removeById(product)" class="btn text-danger me-1">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="imageModalLabel">{{product.name}} Images</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="carouselExample" class="carousel slide">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" *ngFor="let image of product.imageUrls">
+                            <img [src]="'http://localhost:3000/' + image.path" class="d-block w-100">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

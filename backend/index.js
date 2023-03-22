@@ -2,6 +2,7 @@ const connection = require("./database/database")
 const express = require("express")
 const cors = require("cors")
 const createAdminUser = require("./options/configurations")
+const path = require("path")
 
 // Routers
 const authRouter = require("./routers/auth.router")
@@ -10,6 +11,9 @@ const productRouter = require("./routers/product.router")
 
 // For API requests
 const app = express()
+
+// can load for image file
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 // JSON for api requests
 app.use(express.json())

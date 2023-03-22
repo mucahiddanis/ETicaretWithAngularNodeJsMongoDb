@@ -38,6 +38,19 @@ export const routes: Routes = [
                     {
                         path: "categories",
                         loadComponent: () => import("./components/categories/categories.component").then(c => c.CategoriesComponent)
+                    },
+                    {
+                        path: "products",
+                        children: [
+                            {
+                                path: "",
+                                loadComponent: () => import("./components/products/products.component").then(c => c.ProductsComponent)
+                            },
+                            {
+                                path: "add",
+                                loadComponent: () => import("./components/products/product-add/product-add.component").then(c => c.ProductAddComponent)
+                            },
+                        ]
                     }
                 ]
             },

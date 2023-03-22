@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
     categories: [{type: String, ref: 'Category'}],
     price: Number,
     createdDate: Date,
-    updatedDate: Date
+    updatedDate: Date,
+    isActive: Boolean
 })
 
 const Product = mongoose.model("Product", productSchema)
