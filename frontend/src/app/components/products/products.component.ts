@@ -47,4 +47,10 @@ export class ProductsComponent {
   setImageForModal(product: ProductModel) {
     this.product = { ...product }
   }
+
+  changeActive(_id: string){
+    this._product.changeActive(_id, res => {
+      this._toastr.info(res.message)
+    })
+  }
 }

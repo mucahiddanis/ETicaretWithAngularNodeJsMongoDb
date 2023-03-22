@@ -56,4 +56,17 @@ router.post("/removeById", async (req, res) => {
     }
 })
 
+// Change Active
+router.post("/changeActive", async (req, res) => {
+    try {
+        const {_id} = req.body
+        let product = await Product.findById(_id)
+        product.isActive = !product.isActive
+        await Product.findByIdAndUpdate(_id, product)
+        res.json({message: "Changed product active state."})
+    } catch (error) {
+        errorHandler(res, error)
+    }
+})
+
 module.exports = router
