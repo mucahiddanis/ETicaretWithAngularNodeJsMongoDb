@@ -44,9 +44,6 @@ router.post("/removeById", async (req, res) => {
     try {
         const { _id } = req.body
         const product = await Product.findById(_id)
-        for (const image of product.imageUrls) {
-            fs.unlink(image.path, () => { })
-        }
         await Product.findByIdAndRemove(_id)
         res.json({ message: "Product has been successfully deleted!" })
     } catch (error) {
