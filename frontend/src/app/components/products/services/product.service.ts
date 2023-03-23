@@ -36,4 +36,24 @@ export class ProductService {
       callBack(res)
     })
   }
+
+  getById(id: string, callBack: (res:ProductModel)=> void){
+    let model = {_id: id};
+    this._http.post<ProductModel>("products/getById", model, res=>{
+      callBack(res);
+    });
+  }
+
+  update(model: FormData, callBack: (res: MessageResultModel) => void) {
+    this._http.post<MessageResultModel>("products/update", model, res => {
+      callBack(res)
+    })
+  }
+
+  removeImageByProductIdAndIndex(_id: string, index: number, callBack: (res: MessageResultModel) => void){
+    let model = {_id: _id, index: index}
+    this._http.post<MessageResultModel>("products/removeImageByProductIdAndIndex", model, res => {
+      callBack(res)
+    })
+  }
 }

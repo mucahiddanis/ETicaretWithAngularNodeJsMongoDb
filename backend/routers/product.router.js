@@ -45,9 +45,7 @@ router.post("/removeById", async (req, res) => {
         const { _id } = req.body
         const product = await Product.findById(_id)
         for (const image of product.imageUrls) {
-            fs.unlink(image.path, () => {
-
-            })
+            fs.unlink(image.path, () => { })
         }
         await Product.findByIdAndRemove(_id)
         res.json({ message: "Product has been successfully deleted!" })
@@ -59,14 +57,69 @@ router.post("/removeById", async (req, res) => {
 // Change Active
 router.post("/changeActive", async (req, res) => {
     try {
-        const {_id} = req.body
+        const { _id } = req.body
         let product = await Product.findById(_id)
         product.isActive = !product.isActive
         await Product.findByIdAndUpdate(_id, product)
-        res.json({message: "Changed product active state."})
+        res.json({ message: "Changed product active state." })
     } catch (error) {
         errorHandler(res, error)
     }
 })
+
+//Get Product with Id
+router.post("/getById", async (req, res) => {
+    try {
+        const { _id } = req.body;
+        let product = await Product.findById(_id);
+        res.json(product);
+    } catch (error) {
+        errorHandler(res, error)
+    }
+});
+
+// Update Product
+router.post("/update", upload.array("images"), async (req, res) => {
+    try {
+        const { _id, name, description, stock, price, categories } = req.body
+        let product = await Product.findById(_id)
+        for (const image of product.imageUrls) {
+            fs.unlink(image.path, () => { })
+        }
+        let imageUrls = [...product.imageUrls, ...req.files]
+        product = {
+            name: name.toLowerCase(),
+            description: description,
+            stock: stock,
+            price: price,
+            imageUrls: imageUrls,
+            categories: categories,
+            updatedDate: new Date()
+        }
+        await Product.findByIdAndUpdate(_id, product)
+        res.json({ message: "Product updated successfully!" })
+    } catch (error) {
+        errorHandler(res, error)
+    }
+})
+
+// Delete Product Image
+router.post("/removeImageByProductIdAndIndex", async (req, res) => {
+    try {
+        const { _id, index } = req.body;
+        let product = await Product.findById(_id);
+        if (product.imageUrls.length == 1) {
+            res.status(500).json({message: "Last product image cannot be deleted!"})
+        } else {
+            let image = product.imageUrls[index]
+            product.imageUrls.splice(index, 1)
+            await Product.findByIdAndUpdate(_id, product)
+            fs.unlink(image.path, () => { })
+            res.json({message: "Picture was deleted successfully"})
+        }
+    } catch (error) {
+        errorHandler(res, error)
+    }
+});
 
 module.exports = router

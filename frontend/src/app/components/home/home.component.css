@@ -1,0 +1,12 @@
+.active {
+    background-color: #6edceb;
+    font-weight: 500;
+    border-radius: 0px 20px 20px 0;
+    
+}
+
+.desc {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}

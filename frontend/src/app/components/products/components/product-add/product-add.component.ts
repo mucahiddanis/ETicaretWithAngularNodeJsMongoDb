@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../commons/modules/shared.module';
-import { ProductService } from '../services/product.service';
+import { SharedModule } from '../../../commons/modules/shared.module';
+import { ProductService } from '../../services/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
-import { CategoryService } from '../../categories/services/category.service';
-import { CategoryModel } from '../../categories/models/category.model';
+import { CategoryService } from '../../../categories/services/category.service';
+import { CategoryModel } from '../../../categories/models/category.model';
 
 @Component({
   selector: 'app-product-add',

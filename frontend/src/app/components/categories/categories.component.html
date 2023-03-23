@@ -30,7 +30,6 @@
                 <th scope="col">#</th>
                 <th scope="col">Category Name</th>
                 <th scope="col">Created Date</th>
-                <th scope="col">Number of products</th>
                 <th scope="col">Processes</th>
             </tr>
         </thead>
@@ -39,7 +38,6 @@
                 <td>{{index +1}}</td>
                 <td>{{category.name}}</td>
                 <td>{{category.createdDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-                <td>0</td>
                 <td>
                     <button (click)="get(category)" data-bs-toggle="modal" data-bs-target="#updateModal" class="btn text-warning me-1">
                         <i class="fa fa-edit"></i>

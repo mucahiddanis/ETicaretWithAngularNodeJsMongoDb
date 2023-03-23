@@ -11,4 +11,5 @@ export class ProductModel {
     createdDate: string = ""
     isActive: boolean = true
     updatedDate: string = ""
+  id: string
 }

@@ -1,0 +1,114 @@
+<div class="container my-4">
+    <div class="row bg-info-subtle mb-4 pt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a routerLink="/admin/products">Product</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Product Update</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="text-center my-4">
+        <h3 class="border-bottom text-muted">Update Product Form</h3>
+    </div>
+    <div class="row">
+        <form #updateForm="ngForm" (ngSubmit)="update(updateForm)" class="col-md-8 offset-md-2">
+            <div class="form-group">
+                <label class="h6" for="name">Product Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  [(ngModel)]="product.name"
+                  required
+                  minlength="3"
+                  class="form-control"
+                  #name
+                  [appValid]="name.validity.valid">
+            </div>
+            <div class="form-group mt-3">
+                <label class="h6" for="categoriesSelect">Categories</label>
+                <select
+                  class="form-select"
+                  name="categoriesSelect"
+                  id="categoriesSelect"
+                  [(ngModel)]="product.categories"
+                  required
+                  multiple
+                  #categoriesSelect
+                  [appValid]="categoriesSelect.validity.valid">
+                    <option *ngFor="let category of categories" value="{{category._id}}">
+                        {{category.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group mt-3">
+                <label class="h6" for="description">Product Description</label>
+                <textarea
+                  type="text"
+                  name="description"
+                  id="description"
+                  [(ngModel)]="product.description"
+                  required
+                  minlength="5"
+                  class="form-control"
+                  #description
+                  [appValid]="description.validity.valid">
+                </textarea>
+            </div>
+            <div class="form-group mt-3">
+                <label class="h6" for="stock">Stock</label>
+                <input
+                  type="text"
+                  name="stock"
+                  id="stock"
+                  [(ngModel)]="product.stock"
+                  required
+                  min="1"
+                  value="1"
+                  class="form-control"
+                  #stock
+                  [appValid]="stock.validity.valid">
+            </div>
+            <div class="form-group mt-3">
+                <label class="h6" for="price">Price</label>
+                <input
+                  type="text"
+                  name="price"
+                  id="price"
+                  [(ngModel)]="product.price"
+                  required
+                  min="1"
+                  value="1"
+                  class="form-control"
+                  #price
+                  [appValid]="price.validity.valid">
+            </div>
+            <div class="form-group mt-3">
+                <label class="h6" for="images">Images</label>
+                <input 
+                    type="file"
+                    name="images"
+                    id="images"
+                    multiple
+                    #images
+                    ngModel
+                    class="form-control"
+                    (change)="getImages($event)">
+            </div>
+            <div class="form-group mt-3">
+                <span (click)="deleteImage(productId, i)" *ngFor="let image of product.imageUrls let i = index">
+                    <img [src]="'http://localhost:3000/' + image.path" width="100" class="mx-1">                    
+                    </span>
+            </div>
+            <div>
+                <app-loading-button
+                  [form]="updateForm"
+                  btnName="Update"
+                  btnLoadingName="Updating..."
+                  iconClassName="fa-solid fa-arrows-rotate">
+                </app-loading-button>
+            </div>
+        </form>
+    </div>
+</div>
